@@ -51,12 +51,10 @@ library(BiocManager)
 
 ### Importing data ####
 
-q2_biom = import_biom("fcelter-q2.biom")
-metadata_fce = import_qiime_sample_data("metadata-q2fce.txt")
-tree = read_tree("unrooed-tree.nwk")
-rep_fasta = readDNAStringSet("dna-sequences.fasta", format = "fasta")
-
-
+q2_biom = import_biom("Processed_data/fcelter-q2.biom")
+metadata_fce = import_qiime_sample_data("Processed_data/metadata-q2fce.txt")
+tree = read_tree("Processed_data/unrooed-tree.nwk")
+rep_fasta = readDNAStringSet("Processed_data/dna-sequences.fasta", format = "fasta")
 str(metadata_fce)
 #merging the imported components
 
@@ -127,8 +125,19 @@ ggsave("genus_heat_broad.pdf", plot = m, width =12, height = 7, dpi = 1000)
 # taxa change along the gradient, space, time
 
 genus_line <- trans_abund$new(dataset = meco_dataset, taxrank = "Phylum", ntaxa = 5, groupmean = "depth")
-line_depth = genus_line$plot_line()
-ggsave("line_depth.pdf", plot = line_depth, width =8, height = 7, dpi = 1000)
+
+line_depth = genus_line$plot_line()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 14), # Increase x-axis text size
+        axis.text.y = element_text(size = 14), # Increase y-axis text size
+        axis.title.x = element_text(size = 14), # Increase x-axis label size
+        axis.title.y = element_text(size = 14), # Increase y-axis label size
+        strip.text = element_text(size = 14),
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 14),# Increase facet label size
+        panel.border = element_rect(colour = "black", fill = NA, size = 1)) # Add border
+
+line_depth
+ggsave("Output/PDFs/line_depth.pdf", plot = line_depth, width =8, height = 7, dpi = 1000)
 
 genus_line_broad <- trans_abund$new(dataset = meco_dataset, taxrank = "Phylum", ntaxa = 5, groupmean = "env_broad_scale")
 line_broad = genus_line_broad$plot_line()

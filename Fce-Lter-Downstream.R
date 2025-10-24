@@ -140,7 +140,17 @@ line_depth
 ggsave("Output/PDFs/line_depth.pdf", plot = line_depth, width =8, height = 7, dpi = 1000)
 
 genus_line_broad <- trans_abund$new(dataset = meco_dataset, taxrank = "Phylum", ntaxa = 5, groupmean = "env_broad_scale")
-line_broad = genus_line_broad$plot_line()
+
+line_broad = genus_line_broad$plot_line() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 14), # Increase x-axis text size
+        axis.text.y = element_text(size = 14), # Increase y-axis text size
+        axis.title.x = element_text(size = 14), # Increase x-axis label size
+        axis.title.y = element_text(size = 14), # Increase y-axis label size
+        strip.text = element_text(size = 14),
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 14),# Increase facet label size
+        panel.border = element_rect(colour = "black", fill = NA, size = 1)) # Add border
+
 ggsave("line_broad.pdf", plot = line_broad, width =8, height = 7, dpi = 1000)
 
 
@@ -159,9 +169,92 @@ alpha$cal_diff(method = "t.test")
 
 alpha_table_q2fcelter = alpha[["data_alpha"]]
 
-write.csv(alpha_table_q2fcelter, "alpha_table_q2fcelter.csv")
+write.csv(alpha_table_q2fcelter, "Output/data_results/alpha_table_q2fcelter.csv")
 
-dat_alpha = readxl::read_xlsx("alpha_results_q2fcelter.xlsx")
+dat_alpha = readxl::read_xlsx("Output/data_results/alpha_results_q2fcelter.xlsx")
+
+# Check column names
+names(dat_alpha)
+
+alpha <- dat_alpha %>%
+  mutate(
+    env_broad_scale = as.factor(env_broad_scale),
+    depth = as.numeric(depth)
+  )
+
+metrics <- c("Shannon", "Chao1", "Observed", "Simpson") %>% 
+  intersect(names(alpha))
+
+# Fit both linear and quadratic models for each biome
+
+q_model = lm(Shannon ~ depth + I(depth^2), data = alpha)
+
+summary(q_model)
+
+plot(q_model)
+
+eq_data <- alpha %>%
+  group_by(env_broad_scale) %>%
+  do({
+    mod <- lm(Shannon ~ poly(depth, 2, raw = TRUE), data = .)
+    coefs <- coef(mod)
+    tibble(
+      a = coefs[1],
+      b = coefs[2],
+      c = coefs[3],
+      r2 = summary(mod)$r.squared
+    )
+  }) %>%
+  ungroup() %>%
+  mutate(
+    eq_label = sprintf("y = %.2f + %.2f·x + %.2f·x²\nR² = %.2f", a, b, c, r2)
+  )
+
+ql <- ggplot(alpha, aes(x = depth, y = Shannon, color = env_broad_scale)) +
+  geom_point(size = 2) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2, raw = TRUE),
+              se = TRUE, linewidth = 1.1) +
+  facet_wrap(~ env_broad_scale, scales = "free_y") +
+  labs(
+    title = "",
+    x = "Depth (cm)",
+    y = "Shannon Diversity"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    strip.text = element_text(face = "bold"),
+    legend.position = "none",
+    plot.background = element_rect(color = "black", linewidth = 1, fill = NA),
+    panel.border = element_rect(colour = "black", fill = NA, size = 1)) + geom_text(
+      data = eq_data,
+      aes(
+        x = Inf, y = -Inf,           # place at bottom right of each facet
+        label = eq_label,
+        color = env_broad_scale
+      ),
+      hjust = 1.1, vjust = -0.3,
+      size = 3.5,
+      inherit.aes = FALSE,
+      show.legend = FALSE
+    )
+  
+
+ql + geom_text(
+  data = eq_data,
+  aes(
+    x = Inf, y = -Inf,           # place at bottom right of each facet
+    label = eq_label,
+    color = env_broad_scale
+  ),
+  hjust = 1.1, vjust = -0.3,
+  size = 3.5,
+  inherit.aes = FALSE,
+  show.legend = FALSE
+)
+
+ql
+
+ggsave("Output/PDFs/quad_eq.pdf", plot = ql, width =9, height =6, dpi = 1000)
 
 # ---- Ensure factors ----
 # 1) Build clean, ordered depth labels
@@ -288,7 +381,7 @@ beta_fce_loc = beta_fce$plot_ordination( plot_shape = "depth", plot_color = "env
 
 beta_fce_loc
 
-ggsave("beta_fce_brod.pdf", plot = beta_fce_loc, width =9, height =6, dpi = 1000)
+ggsave("Output/PDFs/beta_fce_brod.pdf", plot = beta_fce_loc, width =9, height =6, dpi = 1000)
 
 ## comparing the group distances
 
@@ -326,8 +419,8 @@ depth_bray_plot = depth_beta_grp$plot_group_distance(add = "mean")  +
         legend.text = element_text(size = 14),# Increase facet label size
         panel.border = element_rect(colour = "black", fill = NA, size = 1)) # Add border
 
-ggsave("broad_bray_plot.pdf", plot = broad_bray_plot, width = 7, height =6, dpi = 1000)
-ggsave("depth_bray_plot.pdf", plot = depth_bray_plot, width = 7, height =6, dpi = 1000)
+ggsave("Output/PDFs/broad_bray_plot.pdf", plot = broad_bray_plot, width = 7, height =6, dpi = 1000)
+ggsave("Output/PDFs/depth_bray_plot.pdf", plot = depth_bray_plot, width = 7, height =6, dpi = 1000)
 
 ## PERMANOVA can be applied to the differential test of distances among groups via the cal_manova
 #function developed based on the adonis2 function of vegan package
@@ -361,8 +454,11 @@ meco_dataset$beta_diversity[["betaNTI"]] <- nullmodel$res_ses_betamntd
 plot_betaNTRI <- trans_beta$new(dataset = meco_dataset, group = "env_broad_scale", measure = "betaNRI")
 plot_betaNTRI_depth <- trans_beta$new(dataset = meco_dataset, group = "depth", measure = "betaNRI")
 
+
 plot_betaNTI <- trans_beta$new(dataset = meco_dataset, group = "env_broad_scale", measure = "betaNTI")
 plot_betaNTI_depth <- trans_beta$new(dataset = meco_dataset, group = "depth", measure = "betaNTI")
+
+
 
 # transform the distance for each group
 plot_betaNTRI$cal_group_distance()
@@ -428,11 +524,11 @@ betaNTI_depth <- plot_betaNTI_depth$plot_group_distance(add = "mean") +
         panel.border = element_rect(colour = "black", fill = NA, size = 1)) + 
   geom_hline(yintercept = -2, linetype = 2) + geom_hline(yintercept = 2, linetype = 2)  # Add border
 
-ggsave("betaNTRI_broad.pdf", plot = betaNTRI, width = 8, height =7, dpi = 1000)
-ggsave("betaNTRI_depth.pdf", plot = betaNTRI_depth, width = 8, height =7, dpi = 1000)
+ggsave("Output/PDFs/betaNTRI_broad.pdf", plot = betaNTRI, width = 8, height =7, dpi = 1000)
+ggsave("Output/PDFs/betaNTRI_depth.pdf", plot = betaNTRI_depth, width = 8, height =7, dpi = 1000)
 
-ggsave("betaNTI_broad.pdf", plot = betaNTI_broad, width = 8, height =7, dpi = 1000)
-ggsave("betaNTI_depth.pdf", plot = betaNTI_depth, width = 8, height =7, dpi = 1000)
+ggsave("Output/PDFs/betaNTI_broad.pdf", plot = betaNTI_broad, width = 8, height =7, dpi = 1000)
+ggsave("Output/PDFs/betaNTI_depth.pdf", plot = betaNTI_depth, width = 8, height =7, dpi = 1000)
 
 # RC bray (Bray-Curtis-based Raup-Crick)
 nullmodel$cal_rcbray(runs = 1000)
@@ -441,6 +537,12 @@ nullmodel$res_rcbray
 # use betaNTI and rcbray to evaluate processes
 broad_assem = nullmodel$cal_process(use_betamntd = TRUE, group = "env_broad_scale") 
 depth_assem = nullmodel$cal_process(use_betamntd = TRUE, group = "depth")
+
+broad_process_result = broad_assem$res_process
+depth_process_result = depth_assem$res_process
+
+write.csv(broad_process_result, "Output/assembly process/broad_processes.csv")
+write.csv(depth_process_result, "Output/assembly process/depth_processes.csv")
 
 assem = nullmodel$cal_process(use_betamntd = T)
 

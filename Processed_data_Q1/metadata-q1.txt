@@ -1,0 +1,29 @@
+Sample_ID	BioProject	Collection_Date	env_broad_scale	env_local_scale	env_medium	Organism	Column	Location
+SRR17937357	PRJNA804243	2019-03	Freshwater	Freshwater|Shark River Slough 1	Freshwater|marsh	freshwater metagenome	Sediment	SRS1d
+SRR26124659	PRJNA1018945	2019-03	Freshwater	Freshwater|Shark River Slough 1	surface water	wetland metagenome	Water	SRS1d
+SRR17937356	PRJNA804243	2019-03	Freshwater	Freshwater|Shark River Slough 2	Freshwater|marsh	freshwater metagenome	Sediment	SRS2
+SRR26124652	PRJNA1018945	2019-03	Freshwater	Freshwater|Shark River Slough 2	surface water	wetland metagenome	Water	SRS2
+SRR17937355	PRJNA804243	2019-03	Freshwater	Freshwater|Shark River Slough 3	Freshwater|marsh	freshwater metagenome	Sediment	SRS3
+SRR26124643	PRJNA1018945	2019-03	Freshwater	Freshwater|Shark River Slough 3	surface water	wetland metagenome	Water	SRS3
+SRR17937354	PRJNA804243	2019-03	Mangrove	Mangrove|Shark River Slough 4	Mangrove|marsh	mangrove metagenome	Sediment	SRS4
+SRR26124635	PRJNA1018945	2019-03	Mangrove	Mangrove|Shark River Slough 4	surface water	wetland metagenome	Water	SRS4
+SRR17937352	PRJNA804243	2019-03	Mangrove	Mangrove|Shark River Slough 5	Mangrove|marsh	mangrove metagenome	Sediment	SRS5
+SRR26124626	PRJNA1018945	2019-03	Mangrove	Mangrove|Shark River Slough 5	surface water	wetland metagenome	Water	SRS5
+SRR17937351	PRJNA804243	2019-03	Mangrove	Mangrove|Shark River Slough 6	Mangrove|marsh	mangrove metagenome	Sediment	SRS6
+SRR26124618	PRJNA1018945	2019-03	Mangrove	Mangrove|Shark River Slough 6	surface water	wetland metagenome	Water	SRS6
+SRR17937350	PRJNA804243	2019-03	Freshwater	Freshwater|Taylor Slough 01	Freshwater|marsh	freshwater metagenome	Sediment	TS01
+SRR26124609	PRJNA1018945	2019-03	Freshwater	Freshwater|Taylor Slough 01	surface water	wetland metagenome	Water	TS01
+SRR17937446	PRJNA804243	2019-03	Freshwater	Freshwater|Taylor Slough 02	Freshwater|marsh	freshwater metagenome	Sediment	TS02
+SRR26124595	PRJNA1018945	2019-03	Freshwater	Freshwater|Taylor Slough 02	surface water	wetland metagenome	Water	TS02
+SRR17937433	PRJNA804243	2020-03	Freshwater	Freshwater|Taylor Slough 03	Freshwater|marsh	freshwater metagenome	Sediment	TS03
+SRR26124588	PRJNA1018945	2019-03	Freshwater	Freshwater|Taylor Slough 03	surface water	wetland metagenome	Water	TS03
+SRR17937393	PRJNA804243	2019-02	Mangrove	Mangrove|Taylor Slough 06	Mangrove|marsh	mangrove metagenome	Sediment	TS06
+SRR26124691	PRJNA1018945	2019-03	Mangrove	Mangrove|Taylor Slough 06	surface water	wetland metagenome	Water	TS06
+SRR17937386	PRJNA804243	2019-03	Mangrove	Mangrove|Taylor Slough 07	Mangrove|marsh	mangrove metagenome	Sediment	TS07
+SRR26124686	PRJNA1018945	2019-03	Mangrove	Mangrove|Taylor Slough 07	surface water	wetland metagenome	Water	TS07
+SRR17937445	PRJNA804243	2019-03	Seagrass	Seagrass|Taylor Slough 09	Seagrass|mud	sediment metagenome	Sediment	TS09
+SRR26124684	PRJNA1018945	2019-03	Seagrass	Seagrass|Taylor Slough 09	surface water	wetland metagenome	Water	TS09
+SRR17937349	PRJNA804243	2019-03	Seagrass	Seagrass|Taylor Slough 10	Seagrass|mud	sediment metagenome	Sediment	TS10
+SRR26124606	PRJNA1018945	2019-03	Seagrass	Seagrass|Taylor Slough 10	surface water	wetland metagenome	Water	TS10
+SRR17937348	PRJNA804243	2019-03	Seagrass	Seagrass|Taylor Slough 11	Seagrass|mud	sediment metagenome	Sediment	TS11
+SRR26124601	PRJNA1018945	2019-03	Seagrass	Seagrass|Taylor Slough 11	surface water	wetland metagenome	Water	TS11
